@@ -9,13 +9,21 @@ const SignIn =  React.memo(function (){
   let [emailError, setEmailError] = React.useState('');
   let [passwordError, setPasswordError] = React.useState('');
 
+  useEffect(() => {
+    if(validateEmail() && validatePassword()){
+      ValidationForm(validForm = true);
+    } else {
+      ValidationForm(validForm = false);
+    }
+    outEmailError();
+    outPasswordError();
+  })
+
   function validateEmail() {
     if (email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)){
       return true
     }
   }
-
-  
 
   function validatePassword() {
     if (password.length >= 6 ){
@@ -39,14 +47,6 @@ const SignIn =  React.memo(function (){
     }
   }
 
-  useEffect(() => {
-    if(validateEmail() && validatePassword()){
-      ValidationForm(validForm = true);
-    } else {
-      ValidationForm(validForm = false);
-    }
-  })
-
   function handleSubmit() {
     if(validForm = true){
       Alert.alert('Hi');
@@ -56,10 +56,10 @@ const SignIn =  React.memo(function (){
   return (
     <View style={styles.container}>
       <Text style={styles.textMessage}>Input email</Text>
-      <TextInput style={styles.input} onChangeText={text => onChangeEmail(text)} value={email} onFocus={outEmailError}/>
+      <TextInput style={styles.input} onChangeText={text => onChangeEmail(text)} value={email}/>
       <Text style={styles.textMessageError}>{emailError}</Text>
       <Text style={styles.textMessage}>Input password</Text>
-      <TextInput secureTextEntry={true}  style={styles.input} onChangeText={text => onChangePassword(text)} value={password} onFocus={outPasswordError}/>
+      <TextInput secureTextEntry={true}  style={styles.input} onChangeText={text => onChangePassword(text)} value={password}/>
       <Text style={styles.textMessageError}>{passwordError}</Text>
       <Button onPress={handleSubmit} disabled={!validForm} title="SignIn"/>
     </View>
