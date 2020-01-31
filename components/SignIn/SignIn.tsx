@@ -2,12 +2,15 @@ import React, { useEffect } from 'react';
 import { StyleSheet, TextInput, Button, View, Alert , Text } from 'react-native';
 
 
-const SignIn =  React.memo(function (){
+  export default function SignIn ({navigation}) {
+
   const [email, onChangeEmail] = React.useState('');
   const [password, onChangePassword] = React.useState('');
   let [validForm, ValidationForm] = React.useState(false);
   let [emailError, setEmailError] = React.useState('');
   let [passwordError, setPasswordError] = React.useState('');
+
+
 
   useEffect(() => {
     if(validateEmail() && validatePassword()){
@@ -16,7 +19,7 @@ const SignIn =  React.memo(function (){
       ValidationForm(validForm = false);
     }
     outEmailError();
-    outPasswordError();
+      outPasswordError();
   })
 
   function validateEmail() {
@@ -49,7 +52,7 @@ const SignIn =  React.memo(function (){
 
   function handleSubmit() {
     if(validForm = true){
-      Alert.alert('Hi');
+      navigation.navigate('Dashboard');
     }
   }
 
@@ -64,7 +67,7 @@ const SignIn =  React.memo(function (){
       <Button onPress={handleSubmit} disabled={!validForm} title="SignIn"/>
     </View>
     );
-  });
+  }
 
 const styles = StyleSheet.create({
   container: {
@@ -95,4 +98,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SignIn;
+// export default SignIn;
