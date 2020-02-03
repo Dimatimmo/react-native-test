@@ -1,5 +1,5 @@
 import React, {useEffect } from 'react';
-import { StyleSheet, View, Text, Button, FlatList } from 'react-native';
+import { StyleSheet, View, Text, Button, FlatList, ActivityIndicator } from 'react-native';
 
 export default function Dashboard ({navigation}) {
 
@@ -9,6 +9,7 @@ export default function Dashboard ({navigation}) {
     navigation.navigate('SignIn');
   }
 
+  
   const url = 'https://my-json-server.typicode.com/typicode/demo/posts';
 
   useEffect(() => {
@@ -22,21 +23,37 @@ export default function Dashboard ({navigation}) {
   }
   
   const renderItem = ({item}) => {
-    return(
-    <View style={styles.postsList}>
-      <Text style = {styles.postHead}>PostId: {item.id}</Text>
-      <Text style = {styles.postsContent}>Post Title: {item.title}</Text>
-    </View>
-    )
+      return(
+        <View style={styles.postsListRender}>
+          <Text style = {styles.postHead}>PostId: {item.id}</Text>
+          <Text style = {styles.postsContent}>Post Title: {item.title}</Text>
+        </View>
+      )
+  }
+
+  const renderList = () => {
+    if (posts.length) {
+      return (
+      <FlatList 
+        data={posts}
+        renderItem={renderItem}
+        style = {styles.postsList}
+      />
+      )
+    } else {
+      return(
+        <View>
+          {/* <Text style={styles.textError}>Content is loading</Text> */}
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )
+    }
   }
 
   return (
     <View style={styles.container}>
-      <FlatList 
-        data={posts}
-        renderItem={renderItem}
-      />
       <Button onPress={handleSubmit} title="Logout"></Button>
+      {renderList()}
     </View>
     );
   }
@@ -47,7 +64,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    // justifyContent: 'center',
+    justifyContent: 'center',
   },
   textMessage: {
     fontWeight: 'bold',
@@ -56,22 +73,33 @@ const styles = StyleSheet.create({
     
   },
   postsList: {
-    borderRadius: 4,
-    borderWidth: 0.5,
-    borderColor: '#d6d7da',
     marginBottom: 10,
     alignSelf: 'stretch',
     textAlign: 'center',
-    padding: 10,
+    flex: 1,
 
+  },
+  postsListRender: {
+    borderWidth: 0.5,
+    borderColor: '#ffbc00',
+    marginBottom: 10,
+    textAlign: 'center',
+    padding: 10,
+    backgroundColor: '#ffe8a8'
   },
   postHead: {
     textAlign: 'center',
     alignSelf: 'stretch',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontSize: 20
   },
   postsContent: {
     textAlign: 'center',
     alignSelf: 'stretch',
+    fontSize: 15
   },
+  textError: {
+    fontSize: 40,
+    fontWeight: 'bold',
+  }
 });

@@ -6,9 +6,9 @@ import { StyleSheet, TextInput, Button, View, Alert , Text } from 'react-native'
 
   const [email, onChangeEmail] = React.useState('');
   const [password, onChangePassword] = React.useState('');
-  let [validForm, ValidationForm] = React.useState(false);
   let [emailError, setEmailError] = React.useState('');
   let [passwordError, setPasswordError] = React.useState('');
+  let [validForm, ValidationForm] = React.useState(false);
 
 
 
@@ -19,7 +19,7 @@ import { StyleSheet, TextInput, Button, View, Alert , Text } from 'react-native'
       ValidationForm(validForm = false);
     }
     outEmailError();
-      outPasswordError();
+    outPasswordError();
   })
 
   function validateEmail() {
