@@ -43,7 +43,6 @@ export default function Dashboard ({navigation}) {
     } else {
       return(
         <View>
-          {/* <Text style={styles.textError}>Content is loading</Text> */}
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       )

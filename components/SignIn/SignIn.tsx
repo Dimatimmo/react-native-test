@@ -10,7 +10,18 @@ import { StyleSheet, TextInput, Button, View, Alert , Text } from 'react-native'
   let [passwordError, setPasswordError] = React.useState('');
   let [validForm, ValidationForm] = React.useState(false);
 
+  // const [state, setState] = React.useState({
+  //   email: "",
+  //   password: ""
+  // })
 
+  // function handleChange(evt) {
+  //   const value = evt.target.value;
+  //   setState({
+  //     ...state,
+  //     [evt.target.name]: value
+  //   });
+  // }
 
   useEffect(() => {
     if(validateEmail() && validatePassword()){
