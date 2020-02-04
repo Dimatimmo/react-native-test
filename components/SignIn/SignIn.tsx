@@ -1,84 +1,62 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, TextInput, Button, View, Alert , Text } from 'react-native';
+import React, { useEffect, isValidElement } from 'react';
+import { StyleSheet, TextInput, Button, View, Text } from 'react-native';
+import { Formik } from 'formik';
+import * as yup from 'yup';
 
-
-  export default function SignIn ({navigation}) {
-
-  const [email, onChangeEmail] = React.useState('');
-  const [password, onChangePassword] = React.useState('');
-  let [emailError, setEmailError] = React.useState('');
-  let [passwordError, setPasswordError] = React.useState('');
-  let [validForm, ValidationForm] = React.useState(false);
-
-  // const [state, setState] = React.useState({
-  //   email: "",
-  //   password: ""
-  // })
-
-  // function handleChange(evt) {
-  //   const value = evt.target.value;
-  //   setState({
-  //     ...state,
-  //     [evt.target.name]: value
-  //   });
-  // }
-
-  useEffect(() => {
-    if(validateEmail() && validatePassword()){
-      ValidationForm(validForm = true);
-    } else {
-      ValidationForm(validForm = false);
-    }
-    outEmailError();
-    outPasswordError();
-  })
-
-  function validateEmail() {
-    if (email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)){
-      return true
-    }
-  }
-
-  function validatePassword() {
-    if (password.length >= 6 ){
-      return true
-    }
-  }
-
-  function outEmailError() {
-    if(validateEmail()){
-      setEmailError(emailError = '');
-    } else {
-      setEmailError(emailError='Input correct email');
-    }
-  }
-
-  function outPasswordError() {
-    if(validatePassword()){
-      setPasswordError(passwordError = '');
-    } else {
-      setPasswordError(passwordError = `Your password must be more then ${password.length}` );
-    }
-  }
+export default function SignIn ({navigation}) {
+  const reviewSchema = yup.object({
+    email: yup.string()
+      .required()
+      .email(),
+    password: yup.string()
+      .required()
+      .min(8)
+  });
 
   function handleSubmit() {
-    if(validForm = true){
-      navigation.navigate('Dashboard');
-    }
+    navigation.navigate('Dashboard');
   }
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.textMessage}>Input email</Text>
-      <TextInput style={styles.input} onChangeText={text => onChangeEmail(text)} value={email}/>
-      <Text style={styles.textMessageError}>{emailError}</Text>
-      <Text style={styles.textMessage}>Input password</Text>
-      <TextInput secureTextEntry={true}  style={styles.input} onChangeText={text => onChangePassword(text)} value={password}/>
-      <Text style={styles.textMessageError}>{passwordError}</Text>
-      <Button onPress={handleSubmit} disabled={!validForm} title="SignIn"/>
+  <View style={styles.container}>
+      <Formik
+        validateOnChange={true}
+        initialValues={{ email: '', password: ''}}
+        validationSchema={reviewSchema}
+        onSubmit={() => {
+          handleSubmit();
+        }}
+        isValid = {false}
+      >
+        {props => (
+          <View>
+            <Text style={styles.textMessage}>Input email</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={props.handleChange('email')}
+              onBlur={props.handleBlur('email')} 
+              value={props.values.email}
+            />
+            <Text style={styles.textMessageError}>{props.touched.email && props.errors.email}</Text>
+
+            <Text style={styles.textMessage}>Input password</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={props.handleChange('password')}
+              onBlur={props.handleBlur('password')}
+              value={props.values.password}
+              secureTextEntry
+            />
+            <Text style={styles.textMessageError}>{props.touched.password && props.errors.password}</Text>
+            
+            <Button onPress={handleSubmit} title='SignIn' disabled={!props.isValid} />
+          </View>
+        )}
+      </Formik>
     </View>
     );
   }
+
+
 
 const styles = StyleSheet.create({
   container: {
