@@ -1,14 +1,19 @@
 import React, {useEffect } from 'react';
-import { StyleSheet, View, Text, Button, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, Button, FlatList, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
+import { useNavigation } from "react-navigation-hooks";
 
-export default function Dashboard ({navigation}) {
+export default function Dashboard () {
 
   let [posts, setPosts] = React.useState([]);
+  const { navigate } = useNavigation();
   
   function handleSubmit() {
-    navigation.navigate('SignIn');
+    navigate('SignIn');
   }
 
+  const navigateToFeedDetails = post => {
+    navigate("FeedDetails", { post });
+  };
   
   const url = 'https://my-json-server.typicode.com/typicode/demo/posts';
 
@@ -24,10 +29,12 @@ export default function Dashboard ({navigation}) {
   
   const renderItem = ({item}) => {
       return(
-        <View style={styles.postsListRender}>
-          <Text style = {styles.postHead}>PostId: {item.id}</Text>
-          <Text style = {styles.postsContent}>Post Title: {item.title}</Text>
-        </View>
+        <TouchableOpacity
+        onPress={() => navigateToFeedDetails(item)}
+        style={styles.postsListRender}>
+        <Text style = {styles.postHead}>PostId: {item.id}</Text>
+        <Text style = {styles.postsContent}>Post Title: {item.title}</Text>
+      </TouchableOpacity>
       )
   }
 
@@ -35,6 +42,7 @@ export default function Dashboard ({navigation}) {
     if (posts.length) {
       return (
       <FlatList 
+        keyExtractor={item => item.id.toString() }
         data={posts}
         renderItem={renderItem}
         style = {styles.postsList}

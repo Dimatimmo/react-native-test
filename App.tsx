@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, Button, Alert  } from 'react-native';
-import Navigator from './routes/homeStack';
+import { Router } from './routes/homeStack';
 
 export default function App() {
   return (
-    <Navigator/>
+    <Router/>
   );
 }

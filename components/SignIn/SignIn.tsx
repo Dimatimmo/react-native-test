@@ -1,9 +1,13 @@
 import React, { useEffect, isValidElement } from 'react';
 import { StyleSheet, TextInput, Button, View, Text } from 'react-native';
+import { useNavigation } from "react-navigation-hooks";
 import { Formik } from 'formik';
 import * as yup from 'yup';
 
-export default function SignIn ({navigation}) {
+export default function SignIn () {
+
+  const { navigate } = useNavigation();
+
   const reviewSchema = yup.object({
     email: yup.string()
       .required()
@@ -14,17 +18,17 @@ export default function SignIn ({navigation}) {
   });
 
   function handleSubmit() {
-    navigation.navigate('Dashboard');
+    navigate('Dashboard');
   }
   return (
   <View style={styles.container}>
       <Formik
-        validateOnChange={true}
         initialValues={{ email: '', password: ''}}
         validationSchema={reviewSchema}
         onSubmit={() => {
           handleSubmit();
         }}
+        validateOnMount
         isValid = {false}
       >
         {props => (
@@ -64,7 +68,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    // justifyContent: 'center',
   },
   textMessage: {
     fontWeight: 'bold',
@@ -86,5 +89,3 @@ const styles = StyleSheet.create({
     paddingRight: 10
   }
 });
-
-// export default SignIn;
